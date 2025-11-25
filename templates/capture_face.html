@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block title %}Face Capture - {{ user.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-camera me-2"></i>
+                        Face Capture for {{ user.name }}
+                    </h4>
+                    <small>Person ID: {{ user.person_id }}</small>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Camera Feed -->
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-video me-2"></i>
+                                        Live Camera Feed
+                                    </h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <img src="/video_feed" class="img-fluid rounded" style="max-width: 100%; height: auto;" alt="Live Camera Feed" id="videoFeed" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}">
+                                    <div class="mt-3">
+                                        <button class="btn btn-success btn-lg" onclick="captureUserFace()" id="captureBtn">
+                                            <i class="fas fa-camera me-2"></i>
+                                            Capture Face
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- User Information -->
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-user me-2"></i>
+                                        User Information
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Name:</strong></td>
+                                            <td>{{ user.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Person ID:</strong></td>
+                                            <td><span class="badge bg-primary">{{ user.person_id }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email:</strong></td>
+                                            <td>{{ user.email }}</td>
+                                        </tr>
+                                        {% if user.phone %}
+                                        <tr>
+                                            <td><strong>Phone:</strong></td>
+                                            <td>{{ user.phone }}</td>
+                                        </tr>
+                                        {% endif %}
+                                        {% if user.department %}
+                                        <tr>
+                                            <td><strong>Department:</strong></td>
+                                            <td>{{ user.department }}</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td><strong>Face Data:</strong></td>
+                                            <td>
+                                                {% if user.face_data %}
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-check me-1"></i>Trained
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-exclamation me-1"></i>Not Trained
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Instructions -->
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Instructions
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Look directly at the camera</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Ensure good lighting</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Keep face centered in frame</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Avoid sunglasses or hats</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Click "Capture Face" when ready</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <a href="/admin" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Back to Admin Panel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Container -->
+<div id="alertContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const videoFeed = document.getElementById('videoFeed');
+    const userId = parseInt(videoFeed.dataset.userId);
+    const userName = videoFeed.dataset.userName;
+    
+    function showAlert(message, type = 'info', duration = 5000) {
+        const alertContainer = document.getElementById('alertContainer');
+        const alertId = 'alert-' + Date.now();
+        
+        const alertHtml = `
+            <div class="alert alert-${type} alert-dismissible fade show" id="${alertId}" role="alert">
+                <i class="fas fa-${getAlertIcon(type)} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        
+        alertContainer.insertAdjacentHTML('beforeend', alertHtml);
+        
+        if (duration > 0) {
+            setTimeout(() => {
+                const alert = document.getElementById(alertId);
+                if (alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }
+            }, duration);
+        }
+    }
+    
+    function getAlertIcon(type) {
+        const icons = {
+            'success': 'check-circle',
+            'danger': 'exclamation-triangle',
+            'warning': 'exclamation-circle',
+            'info': 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    }
+    
+    async function captureUserFace() {
+        const captureBtn = document.getElementById('captureBtn');
+        const originalText = captureBtn.innerHTML;
+        
+        captureBtn.disabled = true;
+        captureBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Capturing...';
+        
+        try {
+            const token = localStorage.getItem('access_token');
+            
+            const response = await fetch('/api/capture_face', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ user_id: userId })
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                showAlert(`✅ Face captured successfully for ${userName}!`, 'success');
+                // Update the face data status
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            } else {
+                showAlert(`❌ Face capture failed: ${result.message}`, 'danger');
+            }
+        } catch (error) {
+            console.error('Face capture error:', error);
+            showAlert(`❌ Face capture error: ${error.message}`, 'danger');
+        } finally {
+            captureBtn.disabled = false;
+            captureBtn.innerHTML = originalText;
+        }
+    }
+    
+
+    
+    // Auto-refresh video feed if it fails to load
+    document.getElementById('videoFeed').addEventListener('error', function() {
+        setTimeout(() => {
+            this.src = '/video_feed?' + new Date().getTime();
+        }, 2000);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition App - OpenCV Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .status-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid #28a745;
+        }
+        
+        .status-card.warning {
+            border-left-color: #ffc107;
+        }
+        
+        .status-card.error {
+            border-left-color: #dc3545;
+        }
+        
+        .status-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .status-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .status-value {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .feature-description {
+            color: #6c757d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+        
+        .btn-warning:hover {
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+        }
+        
+        .video-container {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .video-feed {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Face Recognition App</h1>
+            <p>OpenCV Edition - Real-time Face Detection & Recognition</p>
+        </div>
+
+        <div class="status-grid" id="statusGrid">
+            <div class="status-card">
+                <div class="status-icon">🌐</div>
+                <div class="status-title">Flask Server</div>
+                <div class="status-value">Running</div>
+            </div>
+            <div class="status-card">
+                <div class="status-icon">📷</div>
+                <div class="status-title">Camera</div>
+                <div class="status-value" id="cameraStatus">Testing...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-icon">🔍</div>
+                <div class="status-title">Face Detection</div>
+                <div class="status-value" id="faceDetectionStatus">Testing...</div>
+            </div>
+            <div class="status-card">
+                <div class="status-icon">💾</div>
+                <div class="status-title">Database</div>
+                <div class="status-value" id="databaseStatus">Testing...</div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <div class="feature-title">User Registration</div>
+                <div class="feature-description">
+                    Register new users with personal information and capture their face data 
+                    for future recognition.
+                </div>
+                <a href="/register" class="btn">Register User</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-title">Face Recognition</div>
+                <div class="feature-description">
+                    Identify registered users by comparing live camera feed with stored face data 
+                    using advanced algorithms.
+                </div>
+                <a href="/recognize" class="btn">Recognition Page</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <div class="feature-title">System Management</div>
+                <div class="feature-description">
+                    Monitor system status, view recognition logs, and manage users 
+                    through the admin dashboard.
+                </div>
+                <a href="/admin" class="btn">Admin Dashboard</a>
+            </div>
+        </div>
+
+
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSystemStatus();
+        });
+
+        function showResult(message, type = 'success') {
+            const results = document.getElementById('results');
+            const alertClass = type === 'error' ? 'alert-error' : type === 'warning' ? 'alert-warning' : 'alert-success';
+            results.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            results.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                results.style.display = 'none';
+            }, 5000);
+        }
+
+        async function checkSystemStatus() {
+            try {
+                const response = await fetch('/api/system/status');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const components = data.components;
+                    
+                    // Update status indicators
+                    document.getElementById('cameraStatus').textContent = components.camera ? 'Working' : 'Failed';
+                    document.getElementById('faceDetectionStatus').textContent = components.face_detection ? 'Enabled' : 'Disabled';
+                    document.getElementById('databaseStatus').textContent = components.database ? 'Connected' : 'Failed';
+                    
+                    // Update card styles
+                    updateStatusCard('cameraStatus', components.camera);
+                    updateStatusCard('faceDetectionStatus', components.face_detection);
+                    updateStatusCard('databaseStatus', components.database);
+                    
+                    showResult(`✅ System Status: All components checked. Face Recognition Method: ${data.face_recognition_method}`, 'success');
+                } else {
+                    showResult(`❌ System Status Check Failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ System Status Check Failed: ${error.message}`, 'error');
+            }
+        }
+
+        function updateStatusCard(elementId, isWorking) {
+            const element = document.getElementById(elementId);
+            const card = element.closest('.status-card');
+            
+            if (isWorking) {
+                card.className = 'status-card';
+                element.style.color = '#28a745';
+            } else {
+                card.className = 'status-card error';
+                element.style.color = '#dc3545';
+            }
+        }
+
+
+
+
+    </script>
+</body>
+</html>
