@@ -17,6 +17,7 @@ cryptography>=3.0.0
 # Build tools for deployment
 setuptools>=65.0.0
 wheel>=0.37.0
+gunicorn>=20.0.0
 
 # Optional: Face recognition (comment out if deployment fails)
 # face-recognition==1.3.0
