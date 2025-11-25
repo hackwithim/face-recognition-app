@@ -54,7 +54,7 @@ A comprehensive web-based face recognition system built with Flask, OpenCV, and 
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/kashinathgaikwad/face-recognition-app.git
+git clone https://github.com/hackwithim/face-recognition-app.git
 cd face-recognition-app
 ```
 
@@ -208,7 +208,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Kashinath Gaikwad**
 - Email: kashinathgaikwad844@gmail.com
-- GitHub: [@kashinathgaikwad](https://github.com/kashinathgaikwad)
+- GitHub: [@hackwithim](https://github.com/hackwithim)
 
 ## 🙏 Acknowledgments
 

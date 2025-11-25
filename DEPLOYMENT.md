@@ -13,7 +13,7 @@ This guide covers different deployment options for the Face Recognition App.
 
 ### Quick Start
 ```bash
-git clone https://github.com/kashinathgaikwad/face-recognition-app.git
+git clone https://github.com/hackwithim/face-recognition-app.git
 cd face-recognition-app
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
@@ -175,7 +175,7 @@ sudo apt install python3-pip python3-venv git
 
 3. **Clone and setup**
 ```bash
-git clone https://github.com/kashinathgaikwad/face-recognition-app.git
+git clone https://github.com/hackwithim/face-recognition-app.git
 cd face-recognition-app
 python3 -m venv venv
 source venv/bin/activate
@@ -356,7 +356,7 @@ CREATE INDEX idx_recognition_timestamp ON recognition_logs(timestamp);
 For deployment issues:
 - **Developer:** Kashinath Gaikwad
 - **Email:** kashinathgaikwad844@gmail.com
-- **GitHub Issues:** [Report deployment issues](https://github.com/kashinathgaikwad/face-recognition-app/issues)
+- **GitHub Issues:** [Report deployment issues](https://github.com/hackwithim/face-recognition-app/issues)
 
 ---
 

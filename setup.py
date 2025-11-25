@@ -14,7 +14,7 @@ setup(
     description="A comprehensive web-based face recognition system built with Flask and OpenCV",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/kashinathgaikwad/face-recognition-app",
+    url="https://github.com/hackwithim/face-recognition-app",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -34,8 +34,8 @@ setup(
     install_requires=requirements,
     keywords="face-recognition opencv flask web-application computer-vision",
     project_urls={
-        "Bug Reports": "https://github.com/kashinathgaikwad/face-recognition-app/issues",
-        "Source": "https://github.com/kashinathgaikwad/face-recognition-app",
-        "Documentation": "https://github.com/kashinathgaikwad/face-recognition-app#readme",
+        "Bug Reports": "https://github.com/hackwithim/face-recognition-app/issues",
+        "Source": "https://github.com/hackwithim/face-recognition-app",
+        "Documentation": "https://github.com/hackwithim/face-recognition-app#readme",
     },
 )

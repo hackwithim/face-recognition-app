@@ -48,8 +48,8 @@ gh repo create face-recognition-app --public --description "A comprehensive web-
 
 ### 3. Connect Local Repository to GitHub
 ```bash
-# Add GitHub remote (replace 'kashinathgaikwad' with your username)
-git remote add origin https://github.com/kashinathgaikwad/face-recognition-app.git
+# Add GitHub remote
+git remote add origin https://github.com/hackwithim/face-recognition-app.git
 
 # Push to GitHub
 git branch -M main
@@ -184,9 +184,9 @@ Add these to your README.md:
 ![Flask](https://img.shields.io/badge/Flask-2.3+-green.svg)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.8+-red.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![GitHub stars](https://img.shields.io/github/stars/kashinathgaikwad/face-recognition-app.svg)
-![GitHub forks](https://img.shields.io/github/forks/kashinathgaikwad/face-recognition-app.svg)
-![GitHub issues](https://img.shields.io/github/issues/kashinathgaikwad/face-recognition-app.svg)
+![GitHub stars](https://img.shields.io/github/stars/hackwithim/face-recognition-app.svg)
+![GitHub forks](https://img.shields.io/github/forks/hackwithim/face-recognition-app.svg)
+![GitHub issues](https://img.shields.io/github/issues/hackwithim/face-recognition-app.svg)
 ```
 
 ## 🔄 Future Updates
@@ -210,7 +210,7 @@ git push origin main
 If you need help with GitHub upload:
 - **Developer:** Kashinath Gaikwad
 - **Email:** kashinathgaikwad844@gmail.com
-- **GitHub:** [@kashinathgaikwad](https://github.com/kashinathgaikwad)
+- **GitHub:** [@hackwithim](https://github.com/hackwithim)
 
 ## ✅ Upload Checklist
 
@@ -227,4 +227,4 @@ If you need help with GitHub upload:
 **Your Face Recognition App is now live on GitHub! 🎉**
 
 Share your repository:
-`https://github.com/kashinathgaikwad/face-recognition-app`
+`https://github.com/hackwithim/face-recognition-app`
