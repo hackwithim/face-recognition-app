@@ -1,33 +1,40 @@
-# 🚀 Render Deployment - Quick Fix
+# 🚀 Render Deployment - URGENT FIX NEEDED
 
-## ✅ Current Status: Build Successful!
+## ❌ Current Issue: Wrong Start Command
 
-The dependencies are now installing correctly. Just need to fix the start command.
+The error `ModuleNotFoundError: No module named 'your_application'` means Render is using the wrong start command.
 
-## 🔧 Fix the Start Command
+## 🔧 IMMEDIATE FIX REQUIRED
 
-In your Render dashboard:
+### 1. Go to Render Dashboard
+- Open [render.com](https://render.com)
+- Find your `face-recognition-app` service
+- Click on it
 
-### 1. Go to Your Service Settings
-- Open your Render dashboard
-- Go to your `face-recognition-app` service
-- Click on "Settings"
+### 2. Update Start Command (CRITICAL)
+**Current (WRONG):** `gunicorn your_application.wsgi`
 
-### 2. Update Start Command
-**Current (Wrong):** `gunicorn your_application.wsgi`
+**MUST CHANGE TO:** `gunicorn app_opencv_face_detection:app`
 
-**Change to:** `gunicorn app_opencv_face_detection:app --bind 0.0.0.0:$PORT`
+### 3. Step-by-Step Fix:
+1. In Render dashboard, click your service
+2. Go to "Settings" tab
+3. Scroll to "Build & Deploy" section
+4. Find "Start Command" field
+5. **Replace with:** `gunicorn app_opencv_face_detection:app`
+6. Click "Save Changes"
+7. Click "Manual Deploy" → "Deploy latest commit"
 
-### 3. Alternative Start Commands (if above doesn't work):
+### 4. Alternative Commands (try in order):
 ```bash
-# Option 1: Simple
+# Option 1 (Recommended):
+gunicorn app_opencv_face_detection:app
+
+# Option 2 (If Option 1 fails):
 python app_opencv_face_detection.py
 
-# Option 2: With gunicorn (recommended)
-gunicorn app_opencv_face_detection:app --bind 0.0.0.0:$PORT --workers 2
-
-# Option 3: Using Procfile
-web: gunicorn app_opencv_face_detection:app --bind 0.0.0.0:$PORT
+# Option 3 (With port binding):
+gunicorn app_opencv_face_detection:app --bind 0.0.0.0:$PORT
 ```
 
 ## 📋 Environment Variables to Add

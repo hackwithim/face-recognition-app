@@ -1,1 +1,1 @@
-web: gunicorn app_opencv_face_detection:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+web: gunicorn app_opencv_face_detection:app --bind 0.0.0.0:$PORT

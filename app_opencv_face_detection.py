@@ -1861,7 +1861,8 @@ def create_default_admin():
     except Exception as e:
         print(f"Failed to create default admin: {e}")
 
-if __name__ == '__main__':
+def initialize_app():
+    """Initialize the application"""
     with app.app_context():
         try:
             # Create database tables
@@ -1878,9 +1879,6 @@ if __name__ == '__main__':
             print("[OK] OpenCV face detection enabled")
             print("[OK] Camera access available")
             print("")
-            print("Open your browser to: http://localhost:5000")
-            print("Admin login: admin / admin123")
-            print("")
             print("Features available:")
             print("   - Web interface")
             print("   - OpenCV face detection")
@@ -1893,7 +1891,17 @@ if __name__ == '__main__':
             print("      instead of dlib for better compatibility")
             print("=" * 60)
             
-            app.run(debug=True, host='0.0.0.0', port=5000)
-            
         except Exception as e:
-            print(f"Error starting app: {e}")
+            print(f"Error initializing app: {e}")
+
+# Initialize app when imported (for gunicorn)
+initialize_app()
+
+if __name__ == '__main__':
+    # For local development
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') != 'production'
+    
+    print(f"Starting on port {port}, debug={debug}")
+    app.run(debug=debug, host='0.0.0.0', port=port)
